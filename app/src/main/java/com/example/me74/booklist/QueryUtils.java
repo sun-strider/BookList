@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.me74.booklist;
 
 import android.text.TextUtils;
@@ -34,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper methods related to requesting and receiving earthquake data from USGS.
+ * Helper methods related to requesting and receiving books data from google books.
  */
 public final class QueryUtils {
 
@@ -56,7 +41,7 @@ public final class QueryUtils {
      * Start the Google Books API query and return a list of {@link Earthquake} objects.
      */
     public static List<Book> fetchBookData(String requestUrl) {
-        Log.e("Utils", "after call of fetchEarthquakeData");
+        Log.e("Utils", "after call of fetchBookData");
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -140,7 +125,7 @@ public final class QueryUtils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -183,7 +168,7 @@ public final class QueryUtils {
             return null;
         }
 
-        // Create an empty ArrayList that we can start adding earthquakes to
+        // Create an empty ArrayList that we can start adding books to
         List<Book> books = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
@@ -208,6 +193,11 @@ public final class QueryUtils {
                 // for that book.
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
+                // For a given book.volume, extract the JSONObject associated with the
+                // key called "imageLinks", which represents a list of all properties
+                // for that book.
+                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+
                 // Extract the title of the book
                 String title = volumeInfo.getString("title");
 
@@ -225,8 +215,8 @@ public final class QueryUtils {
 
                 // Extract the thumbnail link
                 String thumbnailUrl = null;
-                if (volumeInfo.has("infoLink")) {
-                    thumbnailUrl = volumeInfo.getString("thumbnail");
+                if (imageLinks.has("thumbnail")) {
+                    thumbnailUrl = imageLinks.getString("thumbnail");
                 }
 
                 // Extract the info link

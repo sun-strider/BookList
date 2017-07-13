@@ -15,9 +15,7 @@ import java.util.List;
  * Created by me74 on 12.07.2017.
  */
 
-public class BookAdapter extends ArrayAdapter {
-
-    private String mAuthors = "";
+public class BookAdapter extends ArrayAdapter<Book> {
 
     /**
      * Constructs a new {@link BookAdapter}.
@@ -41,13 +39,13 @@ public class BookAdapter extends ArrayAdapter {
         }
 
         // Find the book at the given position in the list of books
-        Book currentBook = (Book) getItem(position);
+        Book currentBook = getItem(position);
 
 
         // Find the TextView with view ID authors
         TextView authorsView = (TextView) listItemView.findViewById(R.id.authors);
         // Display the author(s) of the current book in that TextView
-        authorsView.setText(mAuthors);
+        authorsView.setText(currentBook.getAuthors());
 
 
         // Find the TextView with view ID title

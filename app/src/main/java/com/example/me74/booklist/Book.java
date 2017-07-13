@@ -70,10 +70,9 @@ public class Book {
     /**
      * @return mInfoLinkUrl    returns the Web Reader URL of the book
      */
-    public String getWebReaderUrl() {
+    public String getInfoLinkUrl() {
         return mInfoLinkUrl;
     }
-
 
 }
 
