@@ -31,7 +31,7 @@ public class Book {
 
 
     /**
-     * Constructs a new {@link Earthquake} object.
+     * Constructs a new {@link Book} object.
      *
      * @param title        is the title of the book
      * @param authors      is the author(s) of the book
