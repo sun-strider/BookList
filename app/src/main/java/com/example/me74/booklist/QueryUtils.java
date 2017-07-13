@@ -51,6 +51,30 @@ public final class QueryUtils {
     private QueryUtils() {
     }
 
+
+    /**
+     * Start the Google Books API query and return a list of {@link Earthquake} objects.
+     */
+    public static List<Book> fetchBookData(String requestUrl) {
+        Log.e("Utils", "after call of fetchEarthquakeData");
+        // Create URL object
+        URL url = createUrl(requestUrl);
+
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<Book> books = extractBookFeatureFromJson(jsonResponse);
+
+        // Return the list of {@link Earthquake}s
+        return books;
+    }
+
     /**
      * Query the USGS dataset and return a list of {@link Earthquake} objects.
      */
