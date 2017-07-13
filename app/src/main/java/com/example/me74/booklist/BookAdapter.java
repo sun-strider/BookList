@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -52,6 +53,10 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView titleView = (TextView) listItemView.findViewById(R.id.title);
         // Display the title of the current book in that TextView
         titleView.setText(currentBook.getTitle());
+
+        // Find the ImageView with view ID thumbnail
+        ImageView picView = (ImageView) listItemView.findViewById(R.id.thumbnail);
+        // Display the title of the current book in that TextView
 
 
         // Return the list item view that is now showing the appropriate data

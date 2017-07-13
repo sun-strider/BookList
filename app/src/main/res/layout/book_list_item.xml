@@ -36,9 +36,8 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:textAllCaps="true"
-            android:textColor="@color/textColorEarthquakeDetails"
-            android:textSize="12sp"
+            android:textColor="@color/textColorAuthors"
+            android:textSize="14sp"
             tools:text="Placeholder authors which should should wrap to two lines" />
 
         <TextView
@@ -47,7 +46,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="@color/textColorEarthquakeLocation"
+            android:textColor="@color/textColorTitle"
             android:textSize="16sp"
             tools:text="Long placeholder location that should wrap to more than 2 lines of text, to be continued on the other side" />
 
