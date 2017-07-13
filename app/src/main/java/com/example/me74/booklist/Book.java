@@ -17,17 +17,17 @@ public class Book {
      * Authors of the book
      */
 
-    private String[] mAuthors;
-
-    /**
-     * Web Reader URL of the book
-     */
-    private String mWebReaderUrl;
+    private String mAuthors;
 
     /**
      * URL of the Thumbnail of the book
      */
     private String mThumbnailUrl;
+
+    /**
+     * Web Reader URL of the book
+     */
+    private String mInfoLinkUrl;
 
 
     /**
@@ -35,44 +35,45 @@ public class Book {
      *
      * @param title        is the title of the book
      * @param authors      is the author(s) of the book
-     * @param webReaderUrl is the Web Reader URL
+     * @param infoLinkUrl is the Web Reader URL
      * @param thumbnailUrl is URL to the thumbnail
      */
-    public Book(String title, String[] authors, String webReaderUrl, String thumbnailUrl) {
+    public Book(String title, String authors, String thumbnailUrl, String infoLinkUrl) {
         mTitle = title;
         mAuthors = authors;
-        mWebReaderUrl = webReaderUrl;
         mThumbnailUrl = thumbnailUrl;
+        mInfoLinkUrl = infoLinkUrl;
     }
 
 
     /**
      * @return mTitle           returns the title of the book
      */
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
     /**
      * @return mAthors          returns the authors of the book
      */
-    public String[] getmAuthors() {
+    public String getAuthors() {
         return mAuthors;
-    }
-
-    /**
-     * @return mWebReaderUrl    returns the Web Reader URL of the book
-     */
-    public String getmWebReaderUrl() {
-        return mWebReaderUrl;
     }
 
     /**
      * @return mThumbnailUrl    returns the thumbnail url of the book
      */
-    public String getmThumbnailUrl() {
+    public String getThumbnailUrl() {
         return mThumbnailUrl;
     }
+
+    /**
+     * @return mInfoLinkUrl    returns the Web Reader URL of the book
+     */
+    public String getWebReaderUrl() {
+        return mInfoLinkUrl;
+    }
+
 
 }
 

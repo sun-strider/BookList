@@ -150,6 +150,84 @@ public final class QueryUtils {
     }
 
     /**
+     * Return a list of {@link Book} objects that has been built up from
+     * parsing the given JSON response.
+     */
+    private static List<Book> extractBookFeatureFromJson(String bookJSON) {
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(bookJSON)) {
+            return null;
+        }
+
+        // Create an empty ArrayList that we can start adding earthquakes to
+        List<Book> books = new ArrayList<>();
+
+        // Try to parse the JSON response string. If there's a problem with the way the JSON
+        // is formatted, a JSONException exception object will be thrown.
+        // Catch the exception so the app doesn't crash, and print the error message to the logs.
+        try {
+
+            // Create a JSONObject from the JSON response string
+            JSONObject baseJsonResponse = new JSONObject(bookJSON);
+
+            // Extract the JSONArray associated with the key called "items",
+            // which represents a list of features (or books).
+            JSONArray itemsArray = baseJsonResponse.getJSONArray("items");
+
+            // For each book in the bookArray, create an {@link Book} object
+            for (int i = 0; i < itemsArray.length(); i++) {
+                // Get a single book at position i within the list of books
+                JSONObject currentBook = itemsArray.getJSONObject(i);
+
+                // For a given book, extract the JSONObject associated with the
+                // key called "volumeInfo", which represents a list of all properties
+                // for that book.
+                JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
+
+                // Extract the title of the book
+                String title = volumeInfo.getString("title");
+
+                // We create a new ArrayList and
+                // Extract the value for the key called "authors"
+                JSONArray authorsArray;
+                String authors;
+                if (volumeInfo.has("authors")) {
+                    authorsArray = volumeInfo.getJSONArray("authors");
+                    authors = authorsArray.join(", ");
+
+                } else {
+                    authors = "No Author";
+                }
+
+                // Extract the thumbnail link
+                String thumbnailUrl = null;
+                if (volumeInfo.has("infoLink")) {
+                    thumbnailUrl = volumeInfo.getString("thumbnail");
+                }
+
+                // Extract the info link
+                String infoLinkUrl = null;
+                if (volumeInfo.has("infoLink")) {
+                    infoLinkUrl = volumeInfo.getString("infoLink");
+                }
+
+                // Create a new {@link Book} object with the title, author and infoLinkUrl from the JSON response.
+                Book book = new Book(title, authors, thumbnailUrl, infoLinkUrl);
+
+                // Add the new {@link book} to the list of books.
+                books.add(book);
+            }
+        } catch (JSONException e) {
+            // If an error is thrown when executing any of the above statements in the "try" block,
+            // catch the exception here, so the app doesn't crash. Print a log message
+            // with the message from the exception.
+            Log.e(LOG_TAG, "Problem parsing the book JSON results", e);
+        }
+        // Return the list of books
+        return books;
+    }
+
+    /**
      * Return a list of {@link Earthquake} objects that has been built up from
      * parsing the given JSON response.
      */
@@ -215,5 +293,4 @@ public final class QueryUtils {
         // Return the list of earthquakes
         return earthquakes;
     }
-
 }

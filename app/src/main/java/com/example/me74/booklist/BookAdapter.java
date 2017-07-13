@@ -46,14 +46,6 @@ public class BookAdapter extends ArrayAdapter {
 
         // Find the TextView with view ID authors
         TextView authorsView = (TextView) listItemView.findViewById(R.id.authors);
-        // Build the authors string
-        for (int index = 0; index < currentBook.getmAuthors().length; index++) {
-            if (index + 1 == currentBook.getmAuthors().length) {
-                mAuthors = mAuthors + currentBook.getmAuthors()[index];
-            } else {
-                mAuthors = mAuthors + currentBook.getmAuthors()[index] + ", ";
-            }
-        }
         // Display the author(s) of the current book in that TextView
         authorsView.setText(mAuthors);
 
@@ -61,7 +53,7 @@ public class BookAdapter extends ArrayAdapter {
         // Find the TextView with view ID title
         TextView titleView = (TextView) listItemView.findViewById(R.id.title);
         // Display the title of the current book in that TextView
-        titleView.setText(currentBook.getmTitle());
+        titleView.setText(currentBook.getTitle());
 
 
         // Return the list item view that is now showing the appropriate data
