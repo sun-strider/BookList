@@ -56,10 +56,12 @@ public class BookAdapter extends ArrayAdapter<Book> {
         // Display the title of the current book in that TextView
         titleView.setText(currentBook.getTitle());
 
-        // Find the ImageView with view ID thumbnail
-        ImageView picView = (ImageView) listItemView.findViewById(R.id.thumbnail);
-        // Display the image of the current book that View
-        Picasso.with(getContext()).load(currentBook.getThumbnailUrl()).into(picView);
+        if (currentBook.getThumbnailUrl() != null) {
+            // Find the ImageView with view ID thumbnail
+            ImageView picView = (ImageView) listItemView.findViewById(R.id.thumbnail);
+            // Display the image of the current book that View
+            Picasso.with(getContext()).load(currentBook.getThumbnailUrl()).into(picView);
+        }
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;

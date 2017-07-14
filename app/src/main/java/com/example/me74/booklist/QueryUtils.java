@@ -157,9 +157,16 @@ public final class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(bookJSON);
 
+            // Create a JSONArray for the items key
+            JSONArray itemsArray;
+
+            if (!baseJsonResponse.has("items")) {
+                return books;
+            }
+
             // Extract the JSONArray associated with the key called "items",
             // which represents a list of features (or books).
-            JSONArray itemsArray = baseJsonResponse.getJSONArray("items");
+            itemsArray = baseJsonResponse.getJSONArray("items");
 
             // For each book in the bookArray, create an {@link Book} object
             for (int i = 0; i < itemsArray.length(); i++) {
@@ -190,6 +197,7 @@ public final class QueryUtils {
                 } else {
                     authors = "No Author";
                 }
+
 
                 // Extract the thumbnail link
                 String thumbnailUrl = null;
