@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hide the loading inicator first
+        startSearch();
+
+        // Hide the loading indicator first
         View loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             loaderManager.initLoader(BOOK_LOADER_ID, null, this);
             if (loaderManager.getLoader(BOOK_LOADER_ID).isStarted()) {
                 //restart it if there's one
-                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, this);
             }
         } else {
             // Otherwise, display error

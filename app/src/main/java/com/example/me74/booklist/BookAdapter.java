@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -56,8 +58,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
         // Find the ImageView with view ID thumbnail
         ImageView picView = (ImageView) listItemView.findViewById(R.id.thumbnail);
-        // Display the title of the current book in that TextView
-
+        // Display the image of the current book that View
+        Picasso.with(getContext()).load(currentBook.getThumbnailUrl()).into(picView);
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;
