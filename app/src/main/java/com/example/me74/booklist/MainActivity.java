@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        startSearch();
+        Log.e(LOG_TAG, "onCreate \n" + fullQueryUrl);
+        setContentView(R.layout.activity_main);
 
         // Hide the loading indicator first
         View loadingIndicator = findViewById(R.id.loading_indicator);
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // so the list can be populated in the user interface
         bookListView.setAdapter(mAdapter);
 
-        // Set a click listener on that View
+        // Set a click listener on the search button
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,11 +87,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 // Show the loading indicator
                 View loadingIndicator = findViewById(R.id.loading_indicator);
                 loadingIndicator.setVisibility(View.VISIBLE);
+
                 // Get the input and make an search Url out of it
                 fullQueryUrl = makeQueryUrl();
-                // Start the search (the data query)
-                startSearch();
 
+                // Start the search (the data query)
+                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
             }
         });
 
@@ -113,11 +115,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(websiteIntent);
             }
         });
-    }
 
 
-    // This method will be called when the search is started
-    private void startSearch() {
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -135,14 +134,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(BOOK_LOADER_ID, null, this);
-            if (loaderManager.getLoader(BOOK_LOADER_ID).isStarted()) {
-                //restart it if there's one
-                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, this);
-            }
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
-            View loadingIndicator = findViewById(R.id.loading_indicator);
+            loadingIndicator = findViewById(R.id.loading_indicator);
             loadingIndicator.setVisibility(View.GONE);
 
             // Update empty state with no connection error message
@@ -164,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<Book>> onCreateLoader(int i, Bundle bundle) {
+        Log.e(LOG_TAG, "onCreateLoader \n" + fullQueryUrl);
+
         // Create a new loader for the given URL
         return new BookLoader(this, fullQueryUrl);
     }
