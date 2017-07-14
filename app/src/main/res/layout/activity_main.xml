@@ -6,13 +6,28 @@
     android:orientation="vertical"
     tools:context="com.example.me74.booklist.MainActivity">
 
-
-    <android.support.v7.widget.SearchView
-        android:id="@+id/search_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:queryHint="@string/search_books" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/search_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="3"
+            android:textSize="16sp"
+            tools:text="@string/no_internet_connection" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:text="search" />
+
+    </LinearLayout>
 
     <include layout="@layout/book_list_activity" />
 
