@@ -9,10 +9,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,9 +69,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Find a reference to the {@link ListView} in the layout
         ListView bookListView = (ListView) findViewById(R.id.list);
 
-        // Find the search TextView
-        TextView search = (TextView) findViewById(R.id.search_button);
-
+        // Set the empty state view
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
         bookListView.setEmptyView(mEmptyStateTextView);
 
@@ -79,20 +77,39 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // so the list can be populated in the user interface
         bookListView.setAdapter(mAdapter);
 
-        // Set a click listener on the search button
-        search.setOnClickListener(new View.OnClickListener() {
+
+        // Find a reference to the {@link SearchView} in the layout
+        SearchView searchView = (SearchView) findViewById(R.id.search_view);
+
+        // Query hint on the SearchView box
+        searchView.setQueryHint(getString(R.string.search_books));
+
+        // Set the SearchView box active
+        searchView.setIconifiedByDefault(false);
+
+        //Set an OnQueryTextListener to the search button
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
-            public void onClick(View v) {
-                mAdapter.clear();
+            public boolean onQueryTextChange(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String newText) {
                 // Show the loading indicator
                 View loadingIndicator = findViewById(R.id.loading_indicator);
                 loadingIndicator.setVisibility(View.VISIBLE);
 
+                SearchView searchView = (SearchView) findViewById(R.id.search_view);
+                String searchString = searchView.getQuery().toString();
+
                 // Get the input and make an search Url out of it
-                fullQueryUrl = makeQueryUrl();
+                fullQueryUrl = makeQueryUrl(searchString);
 
                 // Start the search (the data query)
                 getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                return true;
             }
         });
 
@@ -145,10 +162,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    private String makeQueryUrl() {
+    private String makeQueryUrl(String searchString) {
         String url = GOOGLE_BOOKS_REQUEST_URL;
-        EditText searchView = (EditText) findViewById(R.id.search_view);
-        String searchString = searchView.getText().toString();
         searchString = searchString.replace(" ", "+");
         url = url + searchString;
         return url;
