@@ -178,11 +178,6 @@ public final class QueryUtils {
                 // for that book.
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
 
-                // For a given book.volume, extract the JSONObject associated with the
-                // key called "imageLinks", which represents a list of all properties
-                // for that book.
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-
                 // Extract the title of the book
                 String title = volumeInfo.getString("title");
 
@@ -198,11 +193,17 @@ public final class QueryUtils {
                     authors = "No Author";
                 }
 
-
-                // Extract the thumbnail link
+                // Set the thumbnail URL to null; if no image exists, the value will stay null
                 String thumbnailUrl = null;
-                if (imageLinks.has("thumbnail")) {
-                    thumbnailUrl = imageLinks.getString("thumbnail");
+                if (volumeInfo.has("imageLinks")) {
+                    // For a given book.volume, extract the JSONObject associated with the
+                    // key called "imageLinks", which represents a list of all properties
+                    // for that book.
+                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                    // Extract the thumbnail link
+                    if (imageLinks.has("thumbnail")) {
+                        thumbnailUrl = imageLinks.getString("thumbnail");
+                    }
                 }
 
                 // Extract the info link
