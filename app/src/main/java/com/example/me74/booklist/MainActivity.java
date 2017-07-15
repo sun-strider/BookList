@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public boolean onQueryTextSubmit(String newText) {
+                Log.e(LOG_TAG, "After onQueryTextSubmit is called \n" + fullQueryUrl);
 
                 // Get a reference to the ConnectivityManager to check state of network connectivity
                 ConnectivityManager connMgr = (ConnectivityManager)
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     // Show the loading indicator
                     View loadingIndicator = findViewById(R.id.loading_indicator);
-                    loadingIndicator.setVisibility(View.VISIBLE);
+                    //loadingIndicator.setVisibility(View.VISIBLE);
 
                     SearchView searchView = (SearchView) findViewById(R.id.search_view);
                     String searchString = searchView.getQuery().toString();
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
                     // Start the search (the data query)
                     getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                    Log.e(LOG_TAG, "After restartLoader in onQueryTextSubmit \n" + fullQueryUrl);
 
                 } else {
                     mAdapter.clear();
@@ -165,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(BOOK_LOADER_ID, null, this);
+            Log.e(LOG_TAG, "After initLoader in main onCreate \n" + fullQueryUrl);
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
