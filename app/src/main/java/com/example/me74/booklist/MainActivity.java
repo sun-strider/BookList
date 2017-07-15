@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private String fullQueryUrl;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,18 +96,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public boolean onQueryTextSubmit(String newText) {
-                // Show the loading indicator
-                View loadingIndicator = findViewById(R.id.loading_indicator);
-                loadingIndicator.setVisibility(View.VISIBLE);
 
-                SearchView searchView = (SearchView) findViewById(R.id.search_view);
-                String searchString = searchView.getQuery().toString();
+                // Get a reference to the ConnectivityManager to check state of network connectivity
+                ConnectivityManager connMgr = (ConnectivityManager)
+                        getSystemService(Context.CONNECTIVITY_SERVICE);
+                // Get details on the currently active default data network
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-                // Get the input and make an search Url out of it
-                fullQueryUrl = makeQueryUrl(searchString);
+                // If there is a network connection, fetch data
+                if (networkInfo != null && networkInfo.isConnected()) {
 
-                // Start the search (the data query)
-                getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+                    // Show the loading indicator
+                    View loadingIndicator = findViewById(R.id.loading_indicator);
+                    loadingIndicator.setVisibility(View.VISIBLE);
+
+                    SearchView searchView = (SearchView) findViewById(R.id.search_view);
+                    String searchString = searchView.getQuery().toString();
+
+                    // Get the input and make an search Url out of it
+                    fullQueryUrl = makeQueryUrl(searchString);
+
+                    // Start the search (the data query)
+                    getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+
+                } else {
+                    mAdapter.clear();
+                    // Update empty state with no connection error message
+                    mEmptyStateTextView.setText(R.string.no_internet_connection);
+                }
                 return true;
             }
         });
@@ -132,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(websiteIntent);
             }
         });
-
 
 
         // Get a reference to the ConnectivityManager to check state of network connectivity
