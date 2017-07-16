@@ -99,17 +99,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Log.e(LOG_TAG, "After onQueryTextSubmit is called \n" + fullQueryUrl);
 
                 // Get a reference to the ConnectivityManager to check state of network connectivity
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getSystemService(Context.CONNECTIVITY_SERVICE);
-                // Get details on the currently active default data network
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                NetworkInfo networkInfo = getNetworkInfo();
 
                 // If there is a network connection, fetch data
                 if (networkInfo != null && networkInfo.isConnected()) {
 
                     // Show the loading indicator
                     View loadingIndicator = findViewById(R.id.loading_indicator);
-                    //loadingIndicator.setVisibility(View.VISIBLE);
+                    loadingIndicator.setVisibility(View.VISIBLE);
 
                     SearchView searchView = (SearchView) findViewById(R.id.search_view);
                     String searchString = searchView.getQuery().toString();
@@ -117,9 +114,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     // Get the input and make an search Url out of it
                     fullQueryUrl = makeQueryUrl(searchString);
 
-                    // Start the search (the data query)
-                    getLoaderManager().restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
-                    Log.e(LOG_TAG, "After restartLoader in onQueryTextSubmit \n" + fullQueryUrl);
+                    startLoader("restart");
 
                 } else {
                     mAdapter.clear();
@@ -150,24 +145,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-
-        // Get a reference to the ConnectivityManager to check state of network connectivity
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Get details on the currently active default data network
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        NetworkInfo networkInfo = getNetworkInfo();
 
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
-            // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
 
-            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-            // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(BOOK_LOADER_ID, null, this);
-            Log.e(LOG_TAG, "After initLoader in main onCreate \n" + fullQueryUrl);
+            startLoader("init");
+
         } else {
             // Otherwise, display error
             // First, hide loading indicator so error message will be visible
@@ -177,6 +161,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // Update empty state with no connection error message
             mEmptyStateTextView.setText(R.string.no_internet_connection);
         }
+    }
+
+    private void startLoader(String action) {
+        // Get a reference to the LoaderManager, in order to interact with loaders.
+        LoaderManager loaderManager = getLoaderManager();
+
+        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+        // because this activity implements the LoaderCallbacks interface).
+        if (action == "init") {
+            loaderManager.initLoader(BOOK_LOADER_ID, null, MainActivity.this);
+        } else if (action == "restart") {
+            loaderManager.restartLoader(BOOK_LOADER_ID, null, MainActivity.this);
+        }
+        Log.e(LOG_TAG, "After initLoader in main onCreate \n" + fullQueryUrl);
+    }
+
+    private NetworkInfo getNetworkInfo() {
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        return connMgr.getActiveNetworkInfo();
     }
 
     private String makeQueryUrl(String searchString) {
